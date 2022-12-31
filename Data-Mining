@@ -1,0 +1,141 @@
+%Name: Syed Shamir Raza
+%Email: shamir.raza@tuni.fi
+
+%%% ================================ %%
+%Question 1
+
+
+fprintf("Solving for question 1");
+filedata=readmatrix("bloodp.xlsx")
+[rownum, ncolnum]=size(filedata);
+fprintf("rownum is")
+rownum
+fprintf("num of column is")
+ncolnum
+
+mediansbp = nanmean(filedata(:,1));
+mediandbp = nanmean(filedata(:,2));
+
+mediansbp
+mediandbp
+
+%a=size(filedata,2); tells number of columns
+%b=size(filedata,1); tells number if rows
+%c=length(filedata); tells number of rows
+
+sbp_300 = filedata(:,1) >300; %. sbp over 300 or dbp over 160 are impossible:remove
+filedata(sbp_300,:) =[];
+
+dbp_160 = filedata(:,2) >160;%. sbp over 300 or dbp over 160 are impossible: remove
+filedata(dbp_160,:) =[];
+
+
+for n = 1 : size(filedata,2)
+     for nn = 1:size(filedata,1)
+         if filedata(nn,1)==0 || isnan(filedata(nn,1))
+            filedata(nn,1) = mediansbp;
+         elseif filedata(nn,2)==0 || isnan(filedata(nn,2))
+              filedata(nn,2) = mediandbp   
+         elseif filedata(nn,1) < 80
+            filedata(nn,1) = filedata(nn,1)*10
+         elseif filedata(nn,2) < 40
+            filedata(nn,2) = filedata(nn,2)*10   
+         end
+     end
+end     
+
+%%% ======================================== %%
+%Question 2
+
+arr(1:length(filedata),1) = 1;
+X= [arr , filedata(:,1)];
+X
+Y= [filedata(:,2)]
+Y
+b = (inv(transpose(X)*X))*(transpose(X)*(Y));
+b
+regress(Y,X)
+
+
+%%% ========================================= %%
+%Question 3
+
+Fo= [15, 7, 6, 11, 4]
+Nw=500
+
+Fo=Fo/Nw %nomalizing Fo
+
+Fo1=[1, 4, 3, 3, 6]
+Nw1=200
+Fo1=Fo1/Nw1 %nomalizing F1
+
+Fo2=[20, 1, 5, 16, 9]
+Nw2=210
+Fo2=Fo2/Nw2 %nomalizing F2
+
+Dist_o_1=1-(dot(Fo,Fo1 )/(norm(Fo)*norm(Fo1)))
+Dist_o_2=1-(dot(Fo,Fo2 )/(norm(Fo)*norm(Fo2)))
+
+%%% ================================ %%
+%Question 4
+
+
+filedata2=readmatrix("Tetuan City power consumption.csv")
+filedata2
+filedata2(:,1)=[] %%remove the date column
+filedata2
+
+
+
+for m = 1 : size(filedata2,2)
+     for mm = 1:size(filedata2,1)
+         if filedata2(mm,m)<(nanmean(filedata2(:,m))); 
+            filedata2(mm,m) = 0;
+         elseif filedata2(mm,m) >=(nanmean(filedata2(:,m))); 
+            filedata2(mm,m) = 1;
+         end   
+     end
+end
+
+
+filedata2
+s=[0 1 0 0 0 0 0 0]
+
+%for rr = 1:size(filedata2,1) 
+    %diff = xor(s,filedata2(rr,:))
+    %d = sum(diff)
+   %% fprintf("Hamming distance Row:", rr)
+
+for rr = 1:size(filedata2,1) 
+   pdist2(s,filedata2(rr,:),"hamming")
+end   
+
+%%% ================================ %%
+%Question 5
+
+R = corrcoef(filedata2)
+R1=corrcoef(filedata2(:,1), filedata2(:,2))
+R2
+
+R0=corrcoef(filedata2(:,4), filedata2(:,5))
+R3=corrcoef(filedata2(:,6), filedata2(:,7))
+R4=corrcoef(filedata2(:,6), filedata2(:,8))
+% variable general diffuse flows and diffuse flows shows the highest
+% correlation of  0.8653
+%Variable; ZonePower 1 Consumption and ZonePower 2 Consumption shows
+%second highest correlation 7980
+%Variable; ZonePower 1 Consumption and ZonePower 3 Consumption shows
+% third highest correlation of 0.7264
+
+%%% ================================ %%
+%Question 6
+
+X1=[1 1]
+Y1=[2 2]
+%find cosine measure
+cos_meas= 1-(dot(X1,Y1 )/(norm(X1)*norm(Y1)))
+
+
+cosineSimilarity(X1,Y1)
+
+    
