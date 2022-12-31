@@ -1,0 +1,314 @@
+%Name: Syed Shamir Raza
+%Email: shamir.raza@tuni.fi
+
+%%% ================================ %%
+%Question 1
+
+
+fprintf("Solving for question 1");
+
+filedata=readmatrix("inco13par.txt")
+
+[rownum, ncolnum]=size(filedata);
+
+fprintf("rownum is")
+
+rownum
+
+fprintf("num of column is")
+
+ncolnum
+
+
+fprintf("columns with numeric values will be printed as 1 else 0") 
+numericVars = varfun(@isnumeric,T,'output','uniform')
+fprintf("Printing columns names having numeric values Type and there First value") 
+tNumeric = T(1,numericVars)
+
+
+fprintf("columns with categorical values will be printed as 1 else 0")
+categorVars = varfun(@iscategorical,T,'output','uniform')
+fprintf("Printing columns names having non-numeric/categorical value Type there First value, if no column printed, measn no Categorical columns are present") 
+tCategorical = T(1,categorVars)
+fprintf("Hence, No Categorical Column is present")
+
+
+
+A = importdata('inco13par.txt','\t',1);
+T=readtable("inco13par.txt")  %names of column for the number of diagnosis
+fprintf("from column name it is evident that apart form age and serial no, there are 14 medical diagnosis")
+fprintf("Number unique balues in diagnosi column")
+unique(T(:,2))
+
+summary(T) %summary shows statistical values of each column
+
+
+age_col = filedata(:, end)
+age_col
+avg = nanmean(age_col);
+fprintf("Mean of Age column is")
+avg
+
+
+%%% ================================ %%
+%Question 2
+
+fprintf("Number unique balues in diagnosi column")
+unique(T(:,2))
+%replacing NAN values in variables with same value in the row of DIANOSI COLUMN
+%getting rows with DIAGNOSSI value =0
+row_with_0=find(T.DIAGNOSI==0)
+%getting rows with DIAGNOSSI column value = 1
+row_with_1=find(T.DIAGNOSI==1)
+%getting rows with DIAGNOSSI column value = 2
+row_with_2=find(T.DIAGNOSI==2)
+%getting rows with DIAGNOSSI column value = 3
+row_with_3=find(T.DIAGNOSI==3)
+%getting rows with DIAGNOSSI column value = 4
+row_with_4=find(T.DIAGNOSI==4)
+
+q1=fillmissing(T(row_with_0,:),"constant",0)
+q2=fillmissing(T(row_with_1,:),'constant',1)
+q3=fillmissing(T(row_with_2,:),'constant',2)
+q4=fillmissing(T(row_with_3,:),'constant',3)
+q5=fillmissing(T(row_with_4,:),'constant',4)
+%contatenate vertically, all the filled values tables.
+q=[q1;q2;q3;q4;q5]
+
+%sort w.r.t serial numb. after contatenation
+q_s=sortrows(q)
+
+%%%% ===============================%%
+%Question 3
+
+%boxplot
+%boxplot of UVA
+boxplot(q_s.UVA)
+
+%boxplot of US
+boxplot(q_s.US)
+
+%boxplot of CYM
+boxplot(q_s.CYM)
+
+%boxplot of PTR
+boxplot(q_s.PTR)
+
+
+%Histogram Plot
+%Histogram of Age
+histogram(q_s.AGE)
+
+
+%Histogram of UVA
+histogram(q_s.UVA) %histogram of UVA 
+histogram2(q_s.AGE,q_s.UVA) %histogram of UVA with Age
+
+
+%Histogram of US
+histogram(q_s.US)  %histogram of US
+histogram2(q_s.AGE, q_s.US) %histogram of US with Age
+
+
+%Histogram of PVR
+histogram(q_s.PVR)   %histogram of PVR
+histogram2(q_s.PVR, q_s.AGE) %histogram of PVR with Age
+
+
+%Histogram of PMU
+histogram(T.PMU)   %histogram of PMU 
+histogram2(T.PMU, T.AGE)  %histogram of PMU with Age
+
+
+%Histogram of CYM
+histogram(q_s.CYM) %histogram of CYM
+histogram2(q_s.AGE,q_s.CYM ) %histogram of CYM with Age
+
+
+%Histogram of PTR
+histogram(q_s.PTR) %histogram of PTR
+histogram2(q_s.AGE,q_s.PTR ) %histogram of PTR with Age
+
+
+
+%Histogram of MUC
+histogram(q_s.MUC) %histogram of MUC
+histogram2(q_s.AGE,q_s.MUC ) %histogram of MUC with Age
+
+%Histogram of SS
+histogram(q_s.SS) %histogram of SS
+histogram2(q_s.AGE,q_s.SS ) %histogram of SS with Age
+
+
+%Histogram of UVJ
+histogram(q_s.UVJ) %histogram of UVJ
+histogram2(q_s.AGE,q_s.UVJ ) %histogram of UVJ with Age
+
+%Histogram of SSY
+histogram(q_s.SSY) %histogram of SSY
+histogram2(q_s.AGE,q_s.SSY ) %histogram of SSY with Age
+
+%Histogram of CLU
+histogram(q_s.CLU) %histogram of CLU
+histogram2(q_s.AGE,q_s.CLU ) %histogram of CLU with Age
+
+%Histogram of DV
+histogram(q_s.DV) %histogram of DV
+histogram2(q_s.AGE,q_s.DV ) %histogram of DV with Age
+
+%Histogram of USY
+histogram(q_s.USY) %histogram of USY
+histogram2(q_s.AGE,q_s.USY ) %histogram of USY with Age
+
+
+
+%%%% ===============================%%
+%Question 4
+
+%Eucladian Distance
+
+
+norm(q_s{2,2:15}-q_s{269,2:15})
+
+norm(q_s{269,2:15}-q_s{393,2:15})
+
+norm(q_s{2,2:15}-q_s{393,2:15})
+
+
+%{} are used to print the contents of table
+%As per Eucladian distance,Cases at row 2 and 393 are closest 
+%As per Eucladian distance,Cases at row 269 and 393 are farthest 
+
+%Eucladian in not preferred in High Dimensional Data, At high dimensions, Euclidean distance 
+% loses pretty much all meaning 
+% In High Dimensional Spaces data becomes more sparse. The concept of proximity 
+% or the nearest point looses its usefulness and becomes less meaningful as we increase the 
+% number of Dimensions
+
+
+
+% In addition to Eucladian distance, we can use Manhattan Distances and 
+%Tshebyschev, Minkowski distances, weighted Eucladian Distances.
+
+
+
+%%%% ===============================%%
+%Question 5
+
+% reading csv file to a table
+filedata2=readtable("Tetuan City power consumption.csv")
+% reading csv file to a table without header                      
+m=readtable('Tetuan City power consumption.csv','ReadVariableNames',0);
+m
+m(:,1) = []
+m
+
+%plot for variable Temperature
+plot(m.Var2)
+legend('Temperature')
+
+%plot for variable Humidity
+plot(m.Var3)
+legend('Humidity')
+
+
+%plot for variable WindSpeed
+plot(m.Var3)
+legend('WindSpeed')
+
+
+%plot for variable generalDiffuseFlows
+plot(m.Var4)
+legend('generalDiffuseFlows')
+
+%plot for variable diffuseFlows
+plot(m.Var5)
+legend('diffuseFlows')
+
+%plot for variable  Zone1PowerConsumption
+plot(m.Var6)
+legend('Zone1PowerConsumption')
+
+
+%plot for variable  Zone2PowerConsumption
+plot(m.Var7)
+legend('Zone2PowerConsumption')
+
+
+%plot for variable  Zone3 PowerConsumption
+plot(m.Var7)
+legend('Zone3PowerConsumption')
+
+%============================
+%Question 6
+m_1=readtimetable('power consumption.csv', 'VariableNamingRule','preserve');
+TT = retime(m_1,'daily','sum');
+TT
+
+subplot(2,2,1)
+plot(TT.DateTime, TT.Temperature) %daily plot of temperature, it decreases in winter months and increases in summer
+title('subplot 1: of Temperature')
+subplot(2,2,2)
+plot(TT.DateTime, TT.Humidity) %daily plot of humidity, it decreases in winter months and increases in summer
+title('subplot 1: of Humidity')
+
+subplot(2,2,3)
+plot(TT.DateTime ,TT.("Wind Speed")) %daily plot of Wind Speed
+%the winds seems speed is higher foe longer time period in June till Nov
+title('subplot 1: of Wind Speed')
+
+subplot(2,2,4)
+plot(TT.DateTime ,TT.("general diffuse flows")) %plot general diffuse flows
+%the general diffuse flow is greater in May till Oct, and lower in Nov till March months
+title('subplot 1: of general diffuse flows')
+
+subplot(3,3,1)
+plot(TT.DateTime ,TT.("diffuse flows"))  %plot diffuse flows
+%diffuse flows increases during March till July, and lowers down in after ward
+%months
+title('subplot 1: of diffuse flows')
+
+subplot(3,3,2)  %Zone 1 Power Consumption
+plot(TT.DateTime , TT.("Zone 1 Power Consumption"))
+%power consumption in Zone 1 increases during Summer - May till Oct and decreases in winters (Nov -MArch)
+title('subplot 1: of Zone 1 Power Consumption')
+
+subplot(3,3,3)
+plot(TT.DateTime , TT.("Zone 2  Power Consumption"))
+%power consumption in Zone 2 increases from April to Oct, till Oct and decreases in winters (Nov -MArch)
+title('subplot 1: of Zone 2 Power Consumption')
+
+subplot(3,3,4)
+plot(TT.DateTime , TT.("Zone 3  Power Consumption"))
+%power consumption in Zone 3 increases from May till Aug and decreases in winters (Oct -MArch)
+%Achieved Peak at July
+title('subplot 1: of Zone 3 Power Consumption')
+
+
+
+
+%============================
+%Question 7
+K_m=readtable('Tetuan City power consumption.csv','ReadVariableNames',0);
+K_m
+subplot(2,2,1)
+kmeans(K_m.Var9,3)
+plot(kmeans(K_m.Var9,3))
+
+title('Subplot 1: K =3')
+
+subplot(2,2,2)
+kmeans(K_m.Var9,5)
+plot(kmeans(K_m.Var9,5))
+title('Subplot 1: K =5')
+
+
+subplot(2,2,3)
+plot(kmeans(K_m.Var9,6))
+title('Subplot 1: K =6')
+
+subplot(2,2,4)
+plot(kmeans(K_m.Var9,7))
+title('Subplot 1: K =7')
+% as we increases the K value, the clusters are increasing and centroids are now more 
+% closer to each other, thus ditances have reduced as compared to low K values
