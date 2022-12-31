@@ -1,0 +1,172 @@
+
+
+%% MATLAB %%%
+
+%%%=============================================%%%
+% Q1)
+%reverse array from 100 to 1
+rev=linspace(100,1,100)
+rev
+
+%evenly spaced array
+a=[1:2:100]
+b=1:100
+b=b'
+
+%%%=============================================%%%
+
+%%% Q 2) Finding the intersection
+
+%Numbers from 1 to 100.
+t1=1:100
+
+
+%Dimensions of "Matrix t". Even a scalar is matrix in Matlab (Matrix laboratory)
+l=length(t1)
+d=size(t1)
+
+%Transpose of t.
+tp=t1'
+size(tp)
+
+%100 samples from 50Hz sinusoidal signal sampled at frequency of 8192Hz.
+f=50
+F=8192
+y=sin(2*pi*t1*(f/F))
+plot(t1,y)
+
+%Another signal into the same plot.
+
+y2=cos(2*pi*t1*(f/F))
+plot(t1,y)
+hold on
+plot(t1,y2,'g')
+
+%Dimensions to the axes.
+plot(t1,y)
+hold on
+plot(t1,y2,'g')
+xlabel('Time instant');
+ylabel('Amplitude')
+
+%Legends to the graphs.
+plot(t1,y)
+hold on
+plot(t1,y2,'g')
+xlabel('Time instant');
+ylabel('Amplitude')
+legend('Sine','Cosine');
+
+
+%difference of signals y and y2.
+d1=y2-y;
+plot(d1);
+
+%intersection
+int = intersect(y,y2);
+int
+
+%%fprintf('Intesection point is',yin)
+fprintf('Intesection point is')
+idx = find((y2-y)==min(abs(y2-y)),1)
+
+%%% Q3) Finding the derivative and integral
+%Numbers from 1 to 100.
+t1=1:100
+
+dy=diff(y);
+dn=diff(t1);
+dydn=dy./dn;
+fprintf('Differentiation of y is',dydn);
+%%fprintf('Differentiation of n is',dn);
+
+xd=t1(2:end);
+plot(t1,y,'r');
+hold on
+plot(xd,dydn,'b');
+xlabel('Time Instant');
+ylabel('Amplitude')
+legend('y=sin(x)','dy/dn');
+grid on
+
+
+%%% ========== %%
+%Question 4
+
+fprintf("Matrix file satrt");
+file1=load('Matrix.txt')
+%file=fopen("Matrix.txt")
+fprintf("Matrix second column and fifth row is ");
+v=file1(5,2)
+
+row5=file1(5,:)
+
+plot(row5)
+
+
+%%printing mean of each column%%
+fprintf('Mean of columns: ')
+mean(file1,1)
+
+
+%%printing mean of each row%%
+fprintf('Mean of rows: ')
+m=mean(file1,2)
+fprintf('Min ')
+m
+
+%%printing mean of complete matrix%%
+fprintf('Mean of MAtrix: ')
+mean(mean(file1,2),1)
+
+soundsc(row5)
+
+%%% ========== %%
+%Question 5
+
+%%printing min lowest sounding frequency%%
+lowfreq=abs(readmatrix("Matrix.txt"))
+
+[rownum, colnum]=size(lowfreq);
+fprintf("rownum is")
+rownum
+fprintf("num of column is")
+colnum
+fprintf('Mean of rows: ')
+me=mean(lowfreq,2)
+[val,ind]=min(me)
+fprintf('Min ')
+me
+fprintf("the min sounding frquency row is ")
+find(me==min(me))
+
+
+%D = textscan(fid, '%f%f%f%f%f', 'HeaderLines',1, 'CollectOutput',1);
+%fprintf('Min is: ')
+%MinVal = min(D{:}(:))
+
+%fprintf('Mean of rows: ')
+%m=mean(file1,2)
+%fprintf('Min ')
+%m
+
+
+%%question 6
+fprintf("Solving for question 6");
+filedata=readmatrix("inco13par.txt")
+[rownum, ncolnum]=size(filedata);
+fprintf("rownum is")
+rownum
+fprintf("num of column is")
+ncolnum
+
+
+nan=isnan(filedata)
+nan_total=sum(nan)
+
+
+
+
+
+
+
