@@ -1,0 +1,154 @@
+
+%Question 1%%
+file1=load('Iris.txt');
+file2=file1(:,2:end);
+file2
+
+[coeff,score,latent,tsquared,explained,mu] = pca(file2)
+
+%explained, returns the percentage of the total variance explained by each principal component
+
+(explained(1) + explained(2))/sum(explained)  %percent the two first principal components explain from the whole data variance
+
+
+
+%%% Question 2 %%%
+X=file1(:,2:5);
+y=file1(:,6);
+
+sc1=[]
+sc2=[]
+
+sc3=[]
+sc4=[]
+for k=3:10
+    [idx,weights] = relieff(X,y,k);
+    idx           %idx shows indices of the most important predictor
+    weights
+
+    sc1=[sc1, weights(1)]
+    sc2=[sc2, weights(2)]
+    sc3=[sc3, weights(3)]
+    sc4=[sc4, weights(4)]
+
+end    
+
+plot(3:10,sc1,'g')
+a=plot(3:10,sc1,'g');
+legend(a,'variable1')
+xlabel('K Values');
+ylabel('Score')
+legend('Varible 1')
+hold on
+plot(3:10,sc2,'r')
+legend('variable 2')
+hold on
+
+plot(3:10,sc3,'b')
+xlabel('K Values');
+ylabel('Score')
+legend('Varible 3')
+hold on
+plot(3:10,sc4,'y')
+legend('variable 1', 'variable 2') %variable 1 color is green, %variable 2 color is red, 
+legend('variable 3', 'variable 4') %variable 3 color is blue,  %variable 4 color is yellow, 
+
+
+%yes the number of nearest neighbors affects the result
+
+
+
+%%% Question 3 %%%
+
+file1=load('Iris.txt');
+[row,col]=size(file1)
+
+F1=file1(1:40,2:col);  %first 40 cases from category 1
+F2=file1(51:90,2:col) ;%first 40 cases from category 2
+F3=file1(101:140,2:col); %first 40 cases from category 3
+
+F = [F1;F2;F3]  %combining first 40 cases of all categories
+
+G1=file1(41:50,2:col);  %remaining 10 cases from category 1
+G2=file1(91:100,2:col); %remaining 10 cases from category 2
+G3=file1(141:150,2:col); %remaining 10 cases from category 3
+G=[G1;G2;G3]  %combining remaining 10 cases of all categories
+
+md=fitcnb(F(:,1:4),F(:,5))  %training a Naive Bayesian Classifier usng 120 cases
+  
+a=md.predict(G(:,1:4));    %classifying remaining 10 cases form eacg class (predict)
+  
+confusionmat(a,G(:,5))         %confusion matrix
+
+
+%%% Question 4 %%%
+
+file1=load('Iris.txt');
+file2=file1(:,2:end);
+file2;
+
+
+%using 2 princiapl components here
+
+F1=file2(1:40,1:end);  %first 40 cases from category 1
+F2=file2(51:90,1:end) ;%first 40 cases from category 2
+F3=file2(101:140,1:end); %first 40 cases from category 3
+
+F = [F1;F2;F3]  %combining first 40 cases of all categories
+
+G1=file2(41:50,1:end);  %remaining 10 cases from category 1
+G2=file2(91:100,1:end); %remaining 10 cases from category 2
+G3=file2(141:150,1:end); %remaining 10 cases from category 3
+G=[G1;G2;G3]  %combining remaining 10 cases of all categories
+
+md=fitcnb(F(:,1:2),F(:,5))  %training a Naive Bayesian Classifier usng 120 cases and first 2 principal components
+  
+a=md.predict(G(:,1:2));    %classifying remaining 10 cases form eacg class (predict), first two princiap components
+  
+confusionmat(a,G(:,5))         %confusion matrix
+
+
+
+
+
+%%% Question 5 %%%
+
+%This encoding was used for 
+%amino acids, which forms a set of {A, C, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V, W, Y}
+
+list = ["A", "C", "D", "E"," F", "G", "H", "I", "K", "L", "M", "N", "P"," Q"," R","S", "T"," V", "W", "Y"]
+[row col] = size(list)
+list(2)
+
+PP = 'GGKAPAMM'
+PP(1)
+length(PP)
+sc1=[]
+
+for i=1:length(PP)
+    for j=1:col
+        if PP(i)==list(j)
+            sc1=[sc1, 1];
+            
+        else
+            sc1=[sc1,0];
+       end
+    end
+end
+%We encode each value with a bit sequence of length m
+encode1=sc1(1:20)       % Encoding for G, bit sequence will be [0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0] 
+encode2=sc1(21:40)      % Encoding for G, bit sequence will be [0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0] 
+encode3=sc1(41:60)      % Encoding for K, bit sequence will be [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0] 
+encode4=sc1(61:80)      % Encoding for A, bit sequence will be [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] 
+encode5=sc1(81:100)     % Encoding for P, bit sequence will be [0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0] 
+encode6=sc1(101:120)    % Encoding for A, bit sequence will be [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] 
+encode7=sc1(121:140)    % Encoding for M, bit sequence will be [0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0]
+encode8=sc1(141:160)    % Encoding for M, bit sequence will be [0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0]
+
+
+% 8 encodings generated
+% 5 different symbol sequences here
+%we can use hamming distance for binary data considered here.
+
+
+
